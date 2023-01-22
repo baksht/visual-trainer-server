@@ -1,0 +1,31 @@
+version: '3.0'
+
+services:
+  main:
+    container_name: visual-trainer-server
+    build:
+      context: .
+      target: build
+      target: production
+    env_file:
+      - .production.env
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    restart: always
+  db:
+    container_name: postgres-visual-trainer
+    image: postgres:12
+    env_file:
+      - .production.env
+    environment:
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  pgdata:
