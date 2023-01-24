@@ -8,10 +8,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: chaplyk/docker-compose-remote-action@v1.1
-    with:
-      ssh_host: ${{ secrets.SSH_HOST }}
-      ssh_user: ${{ secrets.SSH_KEY }}
-      ssh_key: ${{ secrets.SSH_KEY }}
-      compose_file: docker-compose.yml
-      pull: true
-      build: true
+        with:
+          ssh_host: ${{ secrets.SSH_HOST }}
+          ssh_user: ${{ secrets.SSH_KEY }}
+          ssh_key: ${{ secrets.SSH_KEY }}
+          compose_file: docker-compose.yml
+          pull: true
+          build: true
