@@ -8,16 +8,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - actions/chockout@v2
+      - uses: actions/checkout@v2
 
-    - uses: djnotes/github-action-ssh-docker-compose@master
-      name: Docker-Stack Remote Deployment
-      with:
-        ssh_host: ${{ secrets.SSH_HOST }}
-        ssh_private_key: ${{ secrets.SSH_KEY }}
-        ssh_user: ${{ secrets.SSH_USER }}
-        docker_compose_prefix: example.com
-        docker_compose_down: 'true'
+      - uses: djnotes/github-action-ssh-docker-compose@master
+        name: Docker-Stack Remote Deployment
+        with:
+          ssh_host: ${{ secrets.SSH_HOST }}
+          ssh_private_key: ${{ secrets.SSH_KEY }}
+          ssh_user: ${{ secrets.SSH_USER }}
+          docker_compose_prefix: example.com
+          docker_compose_down: 'true'
 
 
 # name: Deploy
