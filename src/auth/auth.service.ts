@@ -40,8 +40,8 @@ export class AuthService {
     return this.generateAuthTrainerInfo(trainer);
   }
 
-  public async checkAuthTrainer(email: string): Promise<AuthTrainerDto> {
-    const trainer = await this.trainersService.getTrainerByEmail(email);
+  public async checkAuthTrainer(id: number): Promise<AuthTrainerDto> {
+    const trainer = await this.trainersService.getTrainerById(id);
 
     return this.generateAuthTrainerInfo(trainer);
   }

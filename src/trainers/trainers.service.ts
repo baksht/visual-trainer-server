@@ -17,6 +17,10 @@ export class TrainersService {
     return await this.trainerRepository.findAll();
   }
 
+  public async getTrainerById(id: number): Promise<Trainer> {
+    return await this.trainerRepository.findOne({ where: { id } });
+  }
+
   public async getTrainerByEmail(email: string): Promise<Trainer> {
     return await this.trainerRepository.findOne({ where: { email } });
   }
