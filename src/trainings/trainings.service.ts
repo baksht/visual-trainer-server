@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import ImageDto from 'src/trainings/dto/image.dto';
-import * as fs from 'fs';
-import * as path from 'path';
-import LevelResultsDto from 'src/trainings/dto/level-results.dto';
-import LevelResults from 'src/trainings/models/level-results.model';
-import TrainingStatusDto from 'src/trainings/dto/training-status.dto';
-import LevelInfoDto from 'src/trainings/dto/level-info.dto';
-import StepResults from 'src/trainings/models/step-results.model';
-import Student from 'src/students/models/student.model';
+import { ImageDto } from 'src/trainings/dto/image.dto';
+import { readdirSync } from 'fs';
+import { resolve } from 'path';
+import { LevelResultsDto } from 'src/trainings/dto/level-results.dto';
+import { LevelResults } from 'src/trainings/models/level-results.model';
+import { TrainingStatusDto } from 'src/trainings/dto/training-status.dto';
+import { LevelInfoDto } from 'src/trainings/dto/level-info.dto';
+import { StepResults } from 'src/trainings/models/step-results.model';
+import { Student } from 'src/students/models/student.model';
 
 @Injectable()
-class TrainingsService {
+export class TrainingsService {
   constructor(
     @InjectModel(LevelResults)
     private levelResultsRepository: typeof LevelResults,
@@ -21,10 +21,7 @@ class TrainingsService {
     private studentRepository: typeof Student,
   ) {}
 
-  async levelComplete(
-    studentId: number,
-    levelResults: LevelResultsDto,
-  ): Promise<TrainingStatusDto> {
+  public async levelComplete(studentId: number, levelResults: LevelResultsDto): Promise<TrainingStatusDto> {
     const levelResultEntry = await this.levelResultsRepository.create({
       studentId,
       numberOfLevel: levelResults.numberOfLevel,
@@ -41,14 +38,10 @@ class TrainingsService {
     }
 
     const isTrainingFinished =
-      levelResults.numberOfLevel === 10 &&
-      levelResults.stepsResults.every((stepResults) => stepResults.isRight);
+      levelResults.numberOfLevel === 10 && levelResults.stepsResults.every((stepResults) => stepResults.isRight);
 
     if (isTrainingFinished) {
-      await this.studentRepository.update(
-        { isTrainingFinished: isTrainingFinished },
-        { where: { id: studentId } },
-      );
+      await this.studentRepository.update({ isTrainingFinished: isTrainingFinished }, { where: { id: studentId } });
     }
 
     return await this.getTrainingStatus(studentId);
@@ -56,16 +49,9 @@ class TrainingsService {
 
   private getNextLevel(levelResults: LevelResultsDto): number {
     const numberOfSteps = levelResults.stepsResults.length;
-    const numberOfErrors = levelResults.stepsResults.reduce<number>(
-      (acc, curr) => (!curr.isRight ? acc + 1 : acc),
-      0,
-    );
+    const numberOfErrors = levelResults.stepsResults.reduce<number>((acc, curr) => (!curr.isRight ? acc + 1 : acc), 0);
 
     const errorRate = numberOfErrors / numberOfSteps;
-
-    console.log('Количество шагов ' + numberOfSteps);
-    console.log('Количество ошибок ' + numberOfErrors);
-    console.log('Коэффициент ошибок ' + errorRate);
 
     switch (true) {
       case errorRate === 0:
@@ -91,7 +77,7 @@ class TrainingsService {
     }
   }
 
-  async getLevel(numberOfLevel: string): Promise<LevelInfoDto> {
+  public async getLevel(numberOfLevel: string): Promise<LevelInfoDto> {
     if (!Number.isNaN(Number(numberOfLevel))) {
       return {
         numberOfLevel: Number(numberOfLevel),
@@ -106,7 +92,7 @@ class TrainingsService {
     };
   }
 
-  async getTrainingStatus(studentId: number): Promise<TrainingStatusDto> {
+  public async getTrainingStatus(studentId: number): Promise<TrainingStatusDto> {
     const studentInfo = await this.studentRepository.findOne({
       where: { id: studentId },
       include: [
@@ -133,8 +119,7 @@ class TrainingsService {
       };
     }
 
-    const lastCompletedLevel =
-      studentInfo.levelsResults[studentInfo.levelsResults.length - 1];
+    const lastCompletedLevel = studentInfo.levelsResults[studentInfo.levelsResults.length - 1];
 
     const lastCompletedLevelResults = {
       numberOfLevel: lastCompletedLevel.numberOfLevel,
@@ -158,18 +143,14 @@ class TrainingsService {
   private getLevelImages(numberOfLevel: number): ImageDto[] {
     // Временное решение(подумать над хранением файлов в бинарниках postgres, когда будет доступна админ панель)
     const levelPath = `training/math/level_${numberOfLevel}`;
-    const filePath = path.resolve(__dirname, '..', 'static', levelPath);
+    const filePath = resolve(__dirname, '..', 'static', levelPath);
 
-    return fs
-      .readdirSync(filePath, { withFileTypes: true })
-      .map((image, index) => {
-        return {
-          id: String(index),
-          order: index,
-          image: `${levelPath}/${image.name}`,
-        };
-      });
+    return readdirSync(filePath, { withFileTypes: true }).map((image, index) => {
+      return {
+        id: String(index),
+        order: index,
+        image: `${levelPath}/${image.name}`,
+      };
+    });
   }
 }
-
-export default TrainingsService;

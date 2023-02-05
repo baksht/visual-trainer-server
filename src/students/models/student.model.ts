@@ -1,4 +1,4 @@
-import LevelResults from 'src/trainings/models/level-results.model';
+import { LevelResults } from 'src/trainings/models/level-results.model';
 import { Column, Model, Table, DataType, HasMany } from 'sequelize-typescript';
 
 interface StudentCreationAttributes {
@@ -8,21 +8,19 @@ interface StudentCreationAttributes {
 }
 
 @Table({ tableName: 'students' })
-class Student extends Model<Student, StudentCreationAttributes> {
+export class Student extends Model<Student, StudentCreationAttributes> {
   @Column({ type: DataType.INTEGER, primaryKey: true, autoIncrement: true })
-  id: number;
+  public readonly id: number;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  name: string;
+  public readonly name: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  surname: string;
+  public readonly surname: string;
 
   @Column({ type: DataType.BOOLEAN, allowNull: false })
-  isTrainingFinished: boolean;
+  public readonly isTrainingFinished: boolean;
 
   @HasMany(() => LevelResults)
-  levelsResults: LevelResults[];
+  public readonly levelsResults: LevelResults[];
 }
-
-export default Student;

@@ -1,17 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-class StudentCommonInfoDto {
+export class StudentCommonInfoDto {
   @ApiProperty({ example: 37646, description: 'Идентификатор студента' })
-  readonly id: number;
+  public readonly id: number;
 
   @ApiProperty({ example: 'Иван', description: 'Имя студента' })
-  readonly name: string;
+  public readonly name: string;
 
   @ApiProperty({ example: 'Иванов', description: 'Фамилия студента' })
-  readonly surname: string;
+  public readonly surname: string;
 
   @ApiProperty({ example: true, description: 'ТренингОкончен' })
-  readonly isTrainingFinished: boolean;
+  public readonly isTrainingFinished: boolean;
 }
-
-export default StudentCommonInfoDto;

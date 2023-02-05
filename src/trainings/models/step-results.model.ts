@@ -1,13 +1,5 @@
-import Student from 'src/students/models/student.model';
-import {
-  Column,
-  Model,
-  Table,
-  DataType,
-  BelongsTo,
-  ForeignKey,
-} from 'sequelize-typescript';
-import LevelResults from 'src/trainings/models/level-results.model';
+import { Column, Model, Table, DataType, BelongsTo, ForeignKey } from 'sequelize-typescript';
+import { LevelResults } from 'src/trainings/models/level-results.model';
 
 interface StepResultsCreationAttributes {
   isRight: boolean;
@@ -17,25 +9,23 @@ interface StepResultsCreationAttributes {
 }
 
 @Table({ tableName: 'steps_results' })
-class StepResults extends Model<StepResults, StepResultsCreationAttributes> {
+export class StepResults extends Model<StepResults, StepResultsCreationAttributes> {
   @Column({ type: DataType.INTEGER, primaryKey: true, autoIncrement: true })
-  id: number;
+  public readonly id: number;
 
   @Column({ type: DataType.BOOLEAN })
-  isRight: boolean;
+  public readonly isRight: boolean;
 
   @Column({ type: DataType.INTEGER })
-  stepTime: number;
+  public readonly stepTime: number;
 
   @Column({ type: DataType.INTEGER })
-  imageSwitchesNumber: number;
+  public readonly imageSwitchesNumber: number;
 
   @ForeignKey(() => LevelResults)
   @Column({ type: DataType.INTEGER })
-  levelResultsId: number;
+  public readonly levelResultsId: number;
 
   @BelongsTo(() => LevelResults)
-  levelResults: LevelResults;
+  public readonly levelResults: LevelResults;
 }
-
-export default StepResults;

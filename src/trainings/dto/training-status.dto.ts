@@ -1,15 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-class TrainingStatusDto {
+export class TrainingStatusDto {
   @ApiProperty({ example: true, description: 'Тренинг начат', required: true })
-  readonly isTrainingStarted: boolean;
+  public readonly isTrainingStarted: boolean;
 
   @ApiProperty({
     example: false,
     description: 'Тренинг окончен',
     required: true,
   })
-  readonly isTrainingFinished: boolean;
+  public readonly isTrainingFinished: boolean;
 
   @ApiProperty({
     example: 3,
@@ -18,7 +18,5 @@ class TrainingStatusDto {
     minimum: 1,
     maximum: 10,
   })
-  readonly numberOfNextLevel?: number;
+  public readonly numberOfNextLevel?: number;
 }
-
-export default TrainingStatusDto;

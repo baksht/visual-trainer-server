@@ -1,14 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-class ImageDto {
+export class ImageDto {
   @ApiProperty({ example: '1', description: 'Идентификатор изображения' })
-  readonly id: string;
+  public readonly id: string;
 
   @ApiProperty({ example: 1, description: 'Порядок изображения' })
-  readonly order: number;
+  public readonly order: number;
 
   @ApiProperty({ example: 1, description: 'Путь к файлу' })
-  readonly image: string;
+  public readonly image: string;
 }
-
-export default ImageDto;

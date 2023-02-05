@@ -1,14 +1,6 @@
-import Student from 'src/students/models/student.model';
-import {
-  Column,
-  Model,
-  Table,
-  DataType,
-  BelongsTo,
-  ForeignKey,
-  HasMany,
-} from 'sequelize-typescript';
-import StepResults from 'src/trainings/models/step-results.model';
+import { Student } from 'src/students/models/student.model';
+import { Column, Model, Table, DataType, BelongsTo, ForeignKey, HasMany } from 'sequelize-typescript';
+import { StepResults } from 'src/trainings/models/step-results.model';
 
 interface LevelResultsCreationAttributes {
   numberOfLevel: number;
@@ -17,25 +9,23 @@ interface LevelResultsCreationAttributes {
 }
 
 @Table({ tableName: 'levels_results' })
-class LevelResults extends Model<LevelResults, LevelResultsCreationAttributes> {
+export class LevelResults extends Model<LevelResults, LevelResultsCreationAttributes> {
   @Column({ type: DataType.INTEGER, primaryKey: true, autoIncrement: true })
-  id: number;
+  public readonly id: number;
 
   @Column({ type: DataType.INTEGER, validate: { min: 1, max: 10 } })
-  numberOfLevel: number;
+  public readonly numberOfLevel: number;
 
   @Column({ type: DataType.INTEGER })
-  referenceViewingTime: number;
+  public readonly referenceViewingTime: number;
 
   @ForeignKey(() => Student)
   @Column({ type: DataType.INTEGER })
-  studentId: number;
+  public readonly studentId: number;
 
   @BelongsTo(() => Student)
-  student: Student;
+  public readonly student: Student;
 
   @HasMany(() => StepResults)
-  stepsResults: StepResults[];
+  public readonly stepsResults: StepResults[];
 }
-
-export default LevelResults;

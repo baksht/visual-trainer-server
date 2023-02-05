@@ -1,19 +1,12 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
-class JwtAuthGuard implements CanActivate {
+export class JwtAuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  public canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const req = context.switchToHttp().getRequest();
     try {
       const authHeader = req.headers.authorization;
@@ -22,7 +15,7 @@ class JwtAuthGuard implements CanActivate {
 
       if (bearer !== 'Bearer' || !token) {
         throw new UnauthorizedException({
-          message: 'Студент не авторизован',
+          message: 'Не авторизован!',
         });
       }
 
@@ -30,10 +23,8 @@ class JwtAuthGuard implements CanActivate {
       return true;
     } catch (error) {
       throw new UnauthorizedException({
-        message: 'Студент не авторизован',
+        message: 'Не авторизован!',
       });
     }
   }
 }
-
-export default JwtAuthGuard;
